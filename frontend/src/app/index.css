@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-snitch-gold: #D4AF37;
+  --color-snitch-gold-hover: #F1E5AC;
+  --color-snitch-gold-dark: #AA8C2C;
+  --color-snitch-dark: #0A0A0A;
+  --color-snitch-darker: #050505;
+  --color-snitch-gray: #1A1A1A;
+  --color-snitch-gray-light: #2A2A2A;
+  --color-snitch-border: #333333;
+}
+
+body {
+  @apply bg-snitch-dark text-gray-200 antialiased;
+}
