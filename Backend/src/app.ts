@@ -1,24 +1,35 @@
 import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+
 import rungraph from "./ai/graph.ai.js";
-import cors from "cors"
-
-
+import connectDB from "./db/db.js";
+import authRouter from "./routes/auth.route.js";
 
 const app = express();
+
 app.use(express.json());
 
-app.use(cors({
-  origin: "http://localhost:5173",
-  methods: ["GET", "POST"],
-  credentials: true,
-}))
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
 
-app.get("/", async (req, res) => {
+app.use(cookieParser());
 
-    const result = await rungraph.invoke({
-  problem: "Write a factorial function in JavaScript",
+await connectDB();
+
+app.use("/api/auth", authRouter);
+
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "AI Arena API is running",
+  });
 });
-    });
 
 app.post("/invoke", async (req, res) => {
   try {
@@ -36,8 +47,6 @@ app.post("/invoke", async (req, res) => {
     const result = await rungraph.invoke({
       problem: input.trim(),
     });
-
-    console.log("Graph completed successfully");
 
     return res.status(200).json({
       success: true,
