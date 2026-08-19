@@ -8,6 +8,8 @@ export default function Sidebar({
   onSelectChat,
   onDeleteChat,
   onRenameChat,
+  isOpen,
+  onClose,
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [editingId, setEditingId] = useState(null);
@@ -37,16 +39,28 @@ export default function Sidebar({
   };
 
   return (
-    <aside className="w-64 flex-shrink-0 bg-snitch-darker border-r border-snitch-border flex flex-col h-full z-10">
-      <div className="p-4 border-b border-snitch-border">
-        <button
-          onClick={onNewChat}
-          className="w-full flex items-center justify-center gap-2 bg-snitch-gold hover:bg-snitch-gold-hover text-snitch-darker font-bold py-2.5 px-4 rounded-lg transition-all shadow-[0_0_10px_rgba(212,175,55,0.1)] hover:shadow-[0_0_15px_rgba(212,175,55,0.3)]"
-        >
-          <Plus className="w-5 h-5" />
-          <span>New Chat</span>
-        </button>
-      </div>
+    <>
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm"
+          onClick={onClose}
+        />
+      )}
+      <aside className={`fixed md:relative inset-y-0 left-0 z-50 w-64 flex-shrink-0 bg-snitch-darker border-r border-snitch-border flex flex-col h-full transform transition-transform duration-300 ease-in-out ${
+        isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+      }`}>
+        <div className="p-4 border-b border-snitch-border flex items-center justify-between">
+          <button
+            onClick={onNewChat}
+            className="flex-1 flex items-center justify-center gap-2 bg-snitch-gold hover:bg-snitch-gold-hover text-snitch-darker font-bold py-2.5 px-4 rounded-lg transition-all shadow-[0_0_10px_rgba(212,175,55,0.1)] hover:shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+          >
+            <Plus className="w-5 h-5" />
+            <span>New Chat</span>
+          </button>
+          <button onClick={onClose} className="md:hidden ml-3 p-1.5 text-gray-400 hover:text-white rounded-md hover:bg-snitch-gray transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
       <div className="p-3 border-b border-snitch-border/50">
         <div className="relative">
@@ -146,5 +160,6 @@ export default function Sidebar({
         )}
       </div>
     </aside>
+    </>
   );
 }

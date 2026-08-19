@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import ChatInput from "./ChatInput";
 import MessageBlock from "./MessageBlock";
 import Sidebar from "./Sidebar";
-import { Cpu, LogOut } from "lucide-react";
+import { Cpu, LogOut, Menu } from "lucide-react";
 import axios from "axios";
 
 const generateId = () => Math.random().toString(36).substring(2, 15);
@@ -25,6 +25,7 @@ export default function ChatContainer({ onNavigate, isLoggedIn, setIsLoggedIn, u
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -170,19 +171,30 @@ export default function ChatContainer({ onNavigate, isLoggedIn, setIsLoggedIn, u
         chats={chats}
         activeChatId={activeChatId}
         onNewChat={handleNewChat}
-        onSelectChat={setActiveChatId}
+        onSelectChat={(id) => {
+          setActiveChatId(id);
+          setIsSidebarOpen(false);
+        }}
         onDeleteChat={handleDeleteChat}
         onRenameChat={handleRenameChat}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
 
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         <header className="flex-shrink-0 flex items-center justify-between p-4 border-b border-snitch-border bg-snitch-darker">
           <div className="flex items-center gap-3">
+            <button 
+              className="md:hidden p-2 -ml-2 text-gray-400 hover:text-snitch-gold focus:outline-none transition-colors"
+              onClick={() => setIsSidebarOpen(true)}
+            >
+              <Menu className="w-6 h-6" />
+            </button>
             <div className="w-10 h-10 rounded-lg bg-snitch-gold/10 border border-snitch-gold flex items-center justify-center">
               <Cpu className="w-6 h-6 text-snitch-gold" />
             </div>
 
-            <h1 className="text-xl font-bold text-gray-100 tracking-wider uppercase">
+            <h1 className="text-xl font-bold text-gray-100 tracking-wider uppercase hidden sm:block">
               AI Arena
             </h1>
           </div>
